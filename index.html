@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Puzzle Challenge</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wifi Puzzle</title>
     <style>
         body { margin: 0; padding: 20px; font-family: Arial, sans-serif; }
-        #puzzle-frame { width: 100%; height: 90vh; border: none; }
         #connect-button {
             position: fixed;
             bottom: 20px;
@@ -17,37 +18,35 @@
             border-radius: 5px;
             font-size: 16px;
             cursor: pointer;
-            display: none;
         }
+        .hidden { display: none; }
     </style>
-    <script>
-    function showWifiButton() {
-        document.getElementById('connect-button').style.display = 'block';
-    }
-
-    function connectToWifi() {
-        const ssid = "Yes We Have";
-        const password = "Balaban00!";
-        
-        const wifiConfig = `WIFI:T:WPA;S:${ssid};P:${password};;`;
-        
-        if (/Android/i.test(navigator.userAgent)) {
-            window.location.href = `intent://wifi/#Intent;scheme=wifi;package=com.android.settings;S.wifi_ssid=${ssid};S.wifi_password=${password};end`;
-        }
-        else if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
-            window.location.href = wifiConfig;
-        }
-    }
-
-    window.addEventListener('message', function(event) {
-        if (event.data === 'puzzleSolved') {
-            showWifiButton();
-        }
-    });
-    </script>
 </head>
 <body>
-    <iframe id="puzzle-frame" src="https://sumplete.com"></iframe>
-    <button id="connect-button" onclick="connectToWifi()">Wifi'ya Bağlan</button>
+    <div style="width: 100%; height: 90vh;">
+        <a href="https://sumplete.com" target="_blank" style="display: block; text-align: center; margin: 20px; font-size: 18px;">
+            Bulmacayı çözmek için tıklayın
+        </a>
+    </div>
+    <button id="connect-button" class="hidden" onclick="connectToWifi()">Wifi'ya Bağlan</button>
+
+    <script>
+        function connectToWifi() {
+            const ssid = "Yes We Have";
+            const password = "Balaban00!";
+            const wifiConfig = `WIFI:T:WPA;S:${ssid};P:${password};;`;
+            
+            if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+                window.location.href = wifiConfig;
+            } else {
+                alert('Wifi Bilgileri:\nAğ: Yes We Have\nŞifre: Balaban00!');
+            }
+        }
+
+        // 30 saniye sonra butonu göster
+        setTimeout(() => {
+            document.getElementById('connect-button').classList.remove('hidden');
+        }, 30000);
+    </script>
 </body>
 </html>
