@@ -71,6 +71,7 @@
             cursor: pointer;
             margin-top: 20px;
             transition: all 0.3s;
+            text-decoration: none;
         }
         #connect-button:hover {
             transform: scale(1.05);
@@ -106,11 +107,10 @@
         </div>
         
         <div id="message"></div>
-        <button id="connect-button" onclick="connectToWifi()">CONNECT NOW</button>
+        <a id="connect-button" href="#" onclick="connectToWifi(); return false;">CONNECT NOW</a>
     </div>
 
     <script>
-        // Önceki JavaScript kodu aynı kalacak, sadece sembolleri değiştiriyorum:
         let flippedCards = [];
         let matchedPairs = 0;
         let symbols = ['🎭', '✈️', '💼', '🎨'];
@@ -165,18 +165,19 @@
         function connectToWifi() {
             const ssid = "Yes We Have";
             const password = "Balaban00!";
+            const wifiConfig = `WIFI:T:WPA;S:${ssid};P:${password};;`;
             
+            // Android için
             if (/Android/i.test(navigator.userAgent)) {
-                window.location.href = `intent://wifi/#Intent;scheme=wifi;package=com.android.settings;S.wifi_ssid=${ssid};S.wifi_password=${password};end`;
+                window.location.href = wifiConfig;
             } 
+            // iOS için
             else if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
-                window.location.href = `prefs:root=WIFI&SSID=${ssid}&PASSWORD=${password}`;
-                setTimeout(() => {
-                    alert(`Wifi Bilgileri:\nAğ: ${ssid}\nŞifre: ${password}`);
-                }, 1000);
-            }
+                window.location.href = wifiConfig;
+            } 
+            // Diğer cihazlar için
             else {
-                alert(`Wifi Bilgileri:\nAğ: ${ssid}\nŞifre: ${password}`);
+                window.location.href = wifiConfig;
             }
         }
 
