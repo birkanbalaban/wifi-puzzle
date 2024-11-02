@@ -1,17 +1,15 @@
 <!DOCTYPE html>
 <html>
-<!-- Head ve style kısmı aynı kalacak... -->
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Memory Challenge</title>
+    <title>The Force Memory</title>
     <style>
-        /* Önceki tüm style kodları aynı */
         body { 
             margin: 0; 
             padding: 20px; 
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            background: linear-gradient(135deg, #000000, #1a1a1a, #2c2c2c);
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -19,20 +17,22 @@
             color: white;
         }
         .container {
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(0, 0, 0, 0.9);
             padding: 30px;
             border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            box-shadow: 0 0 30px rgba(255, 0, 0, 0.2);
             text-align: center;
             max-width: 500px;
             width: 90%;
+            border: 1px solid rgba(255, 0, 0, 0.2);
         }
         h1 {
-            font-family: "Courier New", monospace;
+            font-family: "Star Jedi", "Courier New", monospace;
             text-transform: uppercase;
             letter-spacing: 3px;
             margin-bottom: 20px;
-            color: #fdbb2d;
+            color: #FFE81F;
+            text-shadow: 0 0 10px rgba(255, 232, 31, 0.5);
         }
         .memory-game {
             display: grid;
@@ -41,7 +41,7 @@
             margin: 20px 0;
         }
         .card {
-            background: #1a2a6c;
+            background: #1a1a1a;
             aspect-ratio: 1;
             border-radius: 5px;
             cursor: pointer;
@@ -51,21 +51,23 @@
             justify-content: center;
             font-size: 24px;
             color: white;
-            border: 2px solid #fdbb2d;
+            border: 2px solid #FF0000;
+            box-shadow: 0 0 10px rgba(255, 0, 0, 0.3);
         }
         .card:hover {
             transform: scale(1.05);
-            box-shadow: 0 0 15px rgba(253, 187, 45, 0.5);
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
         }
         .card.flipped {
-            background: #b21f1f;
+            background: #3d0000;
             transform: rotateY(180deg);
+            border-color: #FFE81F;
         }
         #connect-button {
             display: none;
             padding: 15px 30px;
-            background: #fdbb2d;
-            color: #1a2a6c;
+            background: #FF0000;
+            color: white;
             border: none;
             border-radius: 25px;
             font-size: 16px;
@@ -74,28 +76,40 @@
             margin-top: 20px;
             transition: all 0.3s;
             text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.4);
         }
         #connect-button:hover {
             transform: scale(1.05);
-            box-shadow: 0 0 20px rgba(253, 187, 45, 0.4);
+            box-shadow: 0 0 25px rgba(255, 0, 0, 0.6);
+            background: #8B0000;
         }
         #message {
             margin-top: 15px;
-            color: #fdbb2d;
+            color: #FFE81F;
             font-weight: bold;
             font-family: "Courier New", monospace;
+            text-shadow: 0 0 10px rgba(255, 232, 31, 0.5);
         }
         .subtitle {
-            color: #fdbb2d;
+            color: #666;
             font-family: "Courier New", monospace;
             margin-bottom: 20px;
+            font-style: italic;
+        }
+        .force-quote {
+            font-size: 14px;
+            color: #666;
+            margin-top: 20px;
+            font-style: italic;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Catch Me If You Can</h1>
-        <p class="subtitle">Memory Challenge Access</p>
+        <h1>Join the Dark Side</h1>
+        <p class="subtitle">"Do. Or do not. There is no try." - Master Yoda</p>
         
         <div class="memory-game">
             <div class="card" data-value="1" onclick="flipCard(this)">?</div>
@@ -109,13 +123,14 @@
         </div>
         
         <div id="message"></div>
-        <a id="connect-button" href="WIFI:T:WPA;S:Yes We Have;P:Balaban00!;;">CONNECT NOW</a>
+        <a id="connect-button" href="WIFI:T:WPA;S:Yes We Have;P:Balaban00!;;">JOIN THE DARK SIDE NOW</a>
+        <p class="force-quote">The WiFi is strong with this one...</p>
     </div>
 
     <script>
         let flippedCards = [];
         let matchedPairs = 0;
-        let symbols = ['🎭', '✈️', '💼', '🎨'];
+        let symbols = ['⚔️', '🌟', '🚀', '👾'];
         let canFlip = true;
 
         function shuffleCards() {
@@ -146,7 +161,7 @@
             if (card1.dataset.value === card2.dataset.value) {
                 matchedPairs++;
                 if (matchedPairs === 4) {
-                    document.getElementById('message').textContent = 'Challenge Complete. Access Granted.';
+                    document.getElementById('message').textContent = 'The Force is strong with you, young Padawan!';
                     document.getElementById('connect-button').style.display = 'block';
                 }
             } else {
