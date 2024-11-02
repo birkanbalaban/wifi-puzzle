@@ -5,12 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wifi Puzzle</title>
     <style>
-        body { margin: 0; padding: 20px; font-family: Arial, sans-serif; }
+        body { 
+            margin: 0; 
+            padding: 20px; 
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        #link {
+            font-size: 18px;
+            margin: 20px;
+            color: #333;
+            text-decoration: none;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            display: inline-block;
+        }
         #connect-button {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
             padding: 15px 30px;
             background-color: #4CAF50;
             color: white;
@@ -18,17 +29,17 @@
             border-radius: 5px;
             font-size: 16px;
             cursor: pointer;
+            margin-top: 30px;
+            display: block;
+            width: 200px;
+            margin-left: auto;
+            margin-right: auto;
         }
-        .hidden { display: none; }
     </style>
 </head>
 <body>
-    <div style="width: 100%; height: 90vh;">
-        <a href="https://sumplete.com" target="_blank" style="display: block; text-align: center; margin: 20px; font-size: 18px;">
-            Bulmacayı çözmek için tıklayın
-        </a>
-    </div>
-    <button id="connect-button" class="hidden" onclick="connectToWifi()">Wifi'ya Bağlan</button>
+    <a id="link" href="https://sumplete.com" target="_blank">Bulmacaya gitmek için tıklayın</a>
+    <button id="connect-button" onclick="connectToWifi()">Wifi'ya Bağlan</button>
 
     <script>
         function connectToWifi() {
@@ -42,11 +53,6 @@
                 alert('Wifi Bilgileri:\nAğ: Yes We Have\nŞifre: Balaban00!');
             }
         }
-
-        // 30 saniye sonra butonu göster
-        setTimeout(() => {
-            document.getElementById('connect-button').classList.remove('hidden');
-        }, 30000);
     </script>
 </body>
 </html>
