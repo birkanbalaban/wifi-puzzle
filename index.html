@@ -1,185 +1,138 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Force Memory</title>
+    <!-- Önceki style kodları aynı, sadece yeni popup style'ı ekliyorum -->
     <style>
-        body { 
-            margin: 0; 
-            padding: 20px; 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #000000, #1a1a1a, #2c2c2c);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-        }
-        .container {
-            background: rgba(0, 0, 0, 0.9);
-            padding: 30px;
-            border-radius: 20px;
-            box-shadow: 0 0 30px rgba(255, 0, 0, 0.2);
+        /* Önceki tüm stiller aynen kalacak */
+        
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.95);
+            padding: 25px;
+            border-radius: 15px;
+            border: 1px solid #FF0000;
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.3);
+            z-index: 1000;
             text-align: center;
-            max-width: 500px;
-            width: 90%;
-            border: 1px solid rgba(255, 0, 0, 0.2);
+            min-width: 300px;
         }
-        h1 {
-            font-family: "Star Jedi", "Courier New", monospace;
-            text-transform: uppercase;
-            letter-spacing: 3px;
+        
+        .popup-content {
             margin-bottom: 20px;
+        }
+        
+        .wifi-detail {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .copy-btn {
+            background: #333;
+            border: none;
             color: #FFE81F;
-            text-shadow: 0 0 10px rgba(255, 232, 31, 0.5);
-        }
-        .memory-game {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
-            margin: 20px 0;
-        }
-        .card {
-            background: #1a1a1a;
-            aspect-ratio: 1;
+            padding: 5px 10px;
             border-radius: 5px;
             cursor: pointer;
+            font-size: 12px;
             transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            color: white;
-            border: 2px solid #FF0000;
-            box-shadow: 0 0 10px rgba(255, 0, 0, 0.3);
         }
-        .card:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
+        
+        .copy-btn:hover {
+            background: #444;
         }
-        .card.flipped {
-            background: #3d0000;
-            transform: rotateY(180deg);
-            border-color: #FFE81F;
-        }
-        #connect-button {
-            display: none;
-            padding: 15px 30px;
-            background: #FF0000;
-            color: white;
+        
+        .popup-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
             border: none;
-            border-radius: 25px;
-            font-size: 16px;
-            font-weight: bold;
+            color: #FF0000;
             cursor: pointer;
-            margin-top: 20px;
-            transition: all 0.3s;
-            text-decoration: none;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            box-shadow: 0 0 15px rgba(255, 0, 0, 0.4);
+            font-size: 20px;
         }
-        #connect-button:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 25px rgba(255, 0, 0, 0.6);
-            background: #8B0000;
-        }
-        #message {
-            margin-top: 15px;
+        
+        .popup h3 {
             color: #FFE81F;
-            font-weight: bold;
-            font-family: "Courier New", monospace;
-            text-shadow: 0 0 10px rgba(255, 232, 31, 0.5);
-        }
-        .subtitle {
-            color: #666;
-            font-family: "Courier New", monospace;
             margin-bottom: 20px;
-            font-style: italic;
         }
-        .force-quote {
-            font-size: 14px;
-            color: #666;
-            margin-top: 20px;
-            font-style: italic;
+
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 999;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Join the Dark Side</h1>
-        <p class="subtitle">"Do. Or do not. There is no try." - Master Yoda</p>
-        
-        <div class="memory-game">
-            <div class="card" data-value="1" onclick="flipCard(this)">?</div>
-            <div class="card" data-value="1" onclick="flipCard(this)">?</div>
-            <div class="card" data-value="2" onclick="flipCard(this)">?</div>
-            <div class="card" data-value="2" onclick="flipCard(this)">?</div>
-            <div class="card" data-value="3" onclick="flipCard(this)">?</div>
-            <div class="card" data-value="3" onclick="flipCard(this)">?</div>
-            <div class="card" data-value="4" onclick="flipCard(this)">?</div>
-            <div class="card" data-value="4" onclick="flipCard(this)">?</div>
+    <!-- Önceki HTML içeriği aynı kalacak, popup'ı en sona ekliyorum -->
+    <div class="overlay" id="overlay"></div>
+    <div class="popup" id="wifi-popup">
+        <button class="popup-close" onclick="closePopup()">×</button>
+        <h3>Imperial WiFi Access Codes</h3>
+        <div class="popup-content">
+            <div class="wifi-detail">
+                <span>Network Name:</span>
+                <span>Yes We Have</span>
+                <button class="copy-btn" onclick="copyText('Yes We Have')">Copy</button>
+            </div>
+            <div class="wifi-detail">
+                <span>Password:</span>
+                <span>Balaban00!</span>
+                <button class="copy-btn" onclick="copyText('Balaban00!')">Copy</button>
+            </div>
         </div>
-        
-        <div id="message"></div>
-        <a id="connect-button" href="WIFI:T:WPA;S:Yes We Have;P:Balaban00!;;">JOIN THE DARK SIDE NOW</a>
-        <p class="force-quote">The WiFi is strong with this one...</p>
     </div>
 
     <script>
-        let flippedCards = [];
-        let matchedPairs = 0;
-        let symbols = ['⚔️', '🌟', '🚀', '👾'];
-        let canFlip = true;
+        // Önceki JavaScript kodları aynı kalacak, yeni fonksiyonları ekliyorum
+        
+        function showPopup() {
+            document.getElementById('wifi-popup').style.display = 'block';
+            document.getElementById('overlay').style.display = 'block';
+        }
 
-        function shuffleCards() {
-            const cards = document.querySelectorAll('.card');
-            cards.forEach(card => {
-                let randomPos = Math.floor(Math.random() * cards.length);
-                card.style.order = randomPos;
+        function closePopup() {
+            document.getElementById('wifi-popup').style.display = 'none';
+            document.getElementById('overlay').style.display = 'none';
+        }
+
+        function copyText(text) {
+            navigator.clipboard.writeText(text).then(function() {
+                // Kopyalama başarılı
+                const btn = event.target;
+                const originalText = btn.textContent;
+                btn.textContent = 'Copied!';
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                }, 1000);
+            }).catch(function(err) {
+                console.error('Could not copy text: ', err);
             });
         }
 
-        function flipCard(card) {
-            if (!canFlip || card.classList.contains('flipped')) return;
-            
-            card.classList.add('flipped');
-            card.textContent = symbols[card.dataset.value - 1];
-            
-            flippedCards.push(card);
-            
-            if (flippedCards.length === 2) {
-                canFlip = false;
-                checkMatch();
-            }
-        }
+        // Connect button'un onclick eventi değişecek
+        document.getElementById('connect-button').onclick = function(e) {
+            e.preventDefault();
+            showPopup();
+        };
 
-        function checkMatch() {
-            const [card1, card2] = flippedCards;
-            
-            if (card1.dataset.value === card2.dataset.value) {
-                matchedPairs++;
-                if (matchedPairs === 4) {
-                    document.getElementById('message').textContent = 'The Force is strong with you, young Padawan!';
-                    document.getElementById('connect-button').style.display = 'block';
-                }
-            } else {
-                setTimeout(() => {
-                    card1.classList.remove('flipped');
-                    card2.classList.remove('flipped');
-                    card1.textContent = '?';
-                    card2.textContent = '?';
-                }, 1000);
-            }
-            
-            setTimeout(() => {
-                flippedCards = [];
-                canFlip = true;
-            }, 1000);
-        }
-
-        window.onload = shuffleCards;
+        // Overlay'e tıklandığında popup'ı kapat
+        document.getElementById('overlay').onclick = closePopup;
     </script>
 </body>
 </html>
