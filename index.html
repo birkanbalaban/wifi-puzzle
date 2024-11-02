@@ -107,7 +107,7 @@
         </div>
         
         <div id="message"></div>
-        <a id="connect-button" href="#" onclick="connectToWifi(); return false;">CONNECT NOW</a>
+        <a id="connect-button" href="wifi://wifi/Yes%20We%Have/Balaban00!">CONNECT NOW</a>
     </div>
 
     <script>
@@ -160,25 +160,6 @@
                 flippedCards = [];
                 canFlip = true;
             }, 1000);
-        }
-
-        function connectToWifi() {
-            const ssid = "Yes We Have";
-            const password = "Balaban00!";
-            const wifiConfig = `WIFI:T:WPA;S:${ssid};P:${password};;`;
-            
-            // Android için
-            if (/Android/i.test(navigator.userAgent)) {
-                window.location.href = wifiConfig;
-            } 
-            // iOS için
-            else if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
-                window.location.href = wifiConfig;
-            } 
-            // Diğer cihazlar için
-            else {
-                window.location.href = wifiConfig;
-            }
         }
 
         window.onload = shuffleCards;
