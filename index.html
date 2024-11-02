@@ -3,154 +3,95 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Force Memory</title>
+    <title>Wifi Puzzle</title>
     <style>
         body { 
             margin: 0; 
             padding: 20px; 
-            font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-            background: #000;
-            min-height: 100vh;
+            font-family: Arial, sans-serif;
             display: flex;
+            flex-direction: column;
             align-items: center;
-            justify-content: center;
-            color: white;
         }
-        .container {
-            background: #111;
-            padding: 20px;
-            border-radius: 10px;
+        .puzzle-container {
+            margin: 20px;
             text-align: center;
-            width: 90%;
-            max-width: 500px;
         }
-        h1 {
-            color: #FFE81F;
-            margin-bottom: 20px;
-        }
-        .memory-game {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
-            margin: 20px 0;
-        }
-        .card {
-            background: #222;
-            aspect-ratio: 1;
-            border-radius: 5px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        .math-puzzle {
             font-size: 24px;
-            color: white;
-            border: 2px solid #FF0000;
+            margin: 20px;
+            padding: 20px;
+            border: 2px solid #ccc;
+            border-radius: 10px;
         }
-        .card.flipped {
-            background: #440000;
+        input {
+            font-size: 20px;
+            padding: 10px;
+            margin: 10px;
+            width: 100px;
+            text-align: center;
         }
-        #connect-button {
-            display: none;
+        button {
             padding: 15px 30px;
-            background: #FF0000;
+            background-color: #4CAF50;
             color: white;
             border: none;
             border-radius: 5px;
             font-size: 16px;
-            margin-top: 20px;
+            cursor: pointer;
+            margin: 10px;
         }
-        #message {
-            margin-top: 15px;
-            color: #FFE81F;
+        .hidden { 
+            display: none; 
         }
-        #wifi-info {
-            display: none;
-            margin-top: 20px;
-            padding: 15px;
-            background: #222;
-            border-radius: 5px;
+        #result {
+            margin: 20px;
+            font-size: 18px;
+            color: #4CAF50;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Join the Dark Side</h1>
-        
-        <div class="memory-game">
-            <div class="card" data-value="1" onclick="flipCard(this)">?</div>
-            <div class="card" data-value="1" onclick="flipCard(this)">?</div>
-            <div class="card" data-value="2" onclick="flipCard(this)">?</div>
-            <div class="card" data-value="2" onclick="flipCard(this)">?</div>
-            <div class="card" data-value="3" onclick="flipCard(this)">?</div>
-            <div class="card" data-value="3" onclick="flipCard(this)">?</div>
-            <div class="card" data-value="4" onclick="flipCard(this)">?</div>
-            <div class="card" data-value="4" onclick="flipCard(this)">?</div>
+    <div class="puzzle-container">
+        <h2>Wifi'ya bağlanmak için bulmacayı çözün</h2>
+        <div class="math-puzzle">
+            <p>Aşağıdaki işlemi çözün:</p>
+            <p>14 × 3 + 8 = ?</p>
         </div>
-        
-        <div id="message"></div>
-        <button id="connect-button" onclick="showWifiInfo()">JOIN THE DARK SIDE</button>
-        <div id="wifi-info">
-            <p>Network: Yes We Have</p>
-            <p>Password: Balaban00!</p>
-        </div>
+        <input type="number" id="answer" placeholder="Cevap?">
+        <button onclick="checkAnswer()">Kontrol Et</button>
     </div>
+    <div id="result" class="hidden"></div>
+    <button id="connect-button" class="hidden" onclick="connectToWifi()">Wifi'ya Bağlan</button>
 
     <script>
-        let flippedCards = [];
-        let matchedPairs = 0;
-        let symbols = ['⚔️', '🌟', '🚀', '👾'];
-        let canFlip = true;
-
-        function flipCard(card) {
-            if (!canFlip || card.classList.contains('flipped')) return;
+        function checkAnswer() {
+            const answer = document.getElementById('answer').value;
+            const result = document.getElementById('result');
+            const connectButton = document.getElementById('connect-button');
             
-            card.classList.add('flipped');
-            card.textContent = symbols[card.dataset.value - 1];
-            
-            flippedCards.push(card);
-            
-            if (flippedCards.length === 2) {
-                canFlip = false;
-                checkMatch();
-            }
-        }
-
-        function checkMatch() {
-            const [card1, card2] = flippedCards;
-            
-            if (card1.dataset.value === card2.dataset.value) {
-                matchedPairs++;
-                if (matchedPairs === 4) {
-                    document.getElementById('message').textContent = 'The Force is strong with you!';
-                    document.getElementById('connect-button').style.display = 'block';
-                }
+            if (answer === '50') {
+                result.textContent = 'Doğru cevap! Wifi\'ya bağlanabilirsiniz.';
+                result.classList.remove('hidden');
+                connectButton.classList.remove('hidden');
             } else {
-                setTimeout(() => {
-                    card1.classList.remove('flipped');
-                    card2.classList.remove('flipped');
-                    card1.textContent = '?';
-                    card2.textContent = '?';
-                }, 1000);
+                result.textContent = 'Yanlış cevap, tekrar deneyin.';
+                result.classList.remove('hidden');
+                result.style.color = 'red';
             }
+        }
+
+        function connectToWifi() {
+            const ssid = "Yes We Have";
+            const password = "Balaban00!";
+            const wifiConfig = `WIFI:T:WPA;S:${ssid};P:${password};;`;
             
-            setTimeout(() => {
-                flippedCards = [];
-                canFlip = true;
-            }, 1000);
+            if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+                window.location.href = wifiConfig;
+            } else {
+                alert('Wifi Bilgileri:\nAğ: Yes We Have\nŞifre: Balaban00!');
+            }
         }
-
-        function showWifiInfo() {
-            document.getElementById('wifi-info').style.display = 'block';
-        }
-
-        function shuffleCards() {
-            const cards = document.querySelectorAll('.card');
-            cards.forEach(card => {
-                let randomPos = Math.floor(Math.random() * cards.length);
-                card.style.order = randomPos;
-            });
-        }
-
-        window.onload = shuffleCards;
     </script>
 </body>
 </html>
