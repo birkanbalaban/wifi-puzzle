@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Puzzle Challenge</title>
+    <script>
+    function checkPuzzleCompletion() {
+        const iframe = document.getElementById('puzzle-frame');
+        const iframeContent = iframe.contentWindow.document;
+        
+        setInterval(() => {
+            if (iframeContent.querySelector('div:contains("Puzzle solved! Well done")')) {
+                redirectToWifi();
+            }
+        }, 1000);
+    }
+
+    function redirectToWifi() {
+        const ssid = "Yes We Have";
+        const password = "Balaban00!";
+        
+        const wifiConfig = `WIFI:T:WPA;S:${ssid};P:${password};;`;
+        
+        if (/Android/i.test(navigator.userAgent)) {
+            window.location.href = `intent://wifi/#Intent;scheme=wifi;package=com.android.settings;S.wifi_ssid=${ssid};S.wifi_password=${password};end`;
+        }
+        else if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+            window.location.href = wifiConfig;
+        }
+    }
+    </script>
+</head>
+<body onload="checkPuzzleCompletion()">
+    <iframe id="puzzle-frame" src="https://sumplete.com" style="width: 100%; height: 100vh; border: none;"></iframe>
+</body>
+</html>
