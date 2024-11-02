@@ -1,138 +1,156 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <!-- Önceki style kodları aynı, sadece yeni popup style'ı ekliyorum -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Force Memory</title>
     <style>
-        /* Önceki tüm stiller aynen kalacak */
-        
-        .popup {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(0, 0, 0, 0.95);
-            padding: 25px;
-            border-radius: 15px;
-            border: 1px solid #FF0000;
-            box-shadow: 0 0 20px rgba(255, 0, 0, 0.3);
-            z-index: 1000;
-            text-align: center;
-            min-width: 300px;
+        body { 
+            margin: 0; 
+            padding: 20px; 
+            font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            background: #000;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
         }
-        
-        .popup-content {
+        .container {
+            background: #111;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            width: 90%;
+            max-width: 500px;
+        }
+        h1 {
+            color: #FFE81F;
             margin-bottom: 20px;
         }
-        
-        .wifi-detail {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 10px;
-            margin: 10px 0;
+        .memory-game {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin: 20px 0;
+        }
+        .card {
+            background: #222;
+            aspect-ratio: 1;
             border-radius: 5px;
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+            border: 2px solid #FF0000;
         }
-        
-        .copy-btn {
-            background: #333;
-            border: none;
-            color: #FFE81F;
-            padding: 5px 10px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 12px;
-            transition: all 0.3s;
+        .card.flipped {
+            background: #440000;
         }
-        
-        .copy-btn:hover {
-            background: #444;
-        }
-        
-        .popup-close {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: none;
-            border: none;
-            color: #FF0000;
-            cursor: pointer;
-            font-size: 20px;
-        }
-        
-        .popup h3 {
-            color: #FFE81F;
-            margin-bottom: 20px;
-        }
-
-        .overlay {
+        #connect-button {
             display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            z-index: 999;
+            padding: 15px 30px;
+            background: #FF0000;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+        #message {
+            margin-top: 15px;
+            color: #FFE81F;
+        }
+        #wifi-info {
+            display: none;
+            margin-top: 20px;
+            padding: 15px;
+            background: #222;
+            border-radius: 5px;
         }
     </style>
 </head>
 <body>
-    <!-- Önceki HTML içeriği aynı kalacak, popup'ı en sona ekliyorum -->
-    <div class="overlay" id="overlay"></div>
-    <div class="popup" id="wifi-popup">
-        <button class="popup-close" onclick="closePopup()">×</button>
-        <h3>Imperial WiFi Access Codes</h3>
-        <div class="popup-content">
-            <div class="wifi-detail">
-                <span>Network Name:</span>
-                <span>Yes We Have</span>
-                <button class="copy-btn" onclick="copyText('Yes We Have')">Copy</button>
-            </div>
-            <div class="wifi-detail">
-                <span>Password:</span>
-                <span>Balaban00!</span>
-                <button class="copy-btn" onclick="copyText('Balaban00!')">Copy</button>
-            </div>
+    <div class="container">
+        <h1>Join the Dark Side</h1>
+        
+        <div class="memory-game">
+            <div class="card" data-value="1" onclick="flipCard(this)">?</div>
+            <div class="card" data-value="1" onclick="flipCard(this)">?</div>
+            <div class="card" data-value="2" onclick="flipCard(this)">?</div>
+            <div class="card" data-value="2" onclick="flipCard(this)">?</div>
+            <div class="card" data-value="3" onclick="flipCard(this)">?</div>
+            <div class="card" data-value="3" onclick="flipCard(this)">?</div>
+            <div class="card" data-value="4" onclick="flipCard(this)">?</div>
+            <div class="card" data-value="4" onclick="flipCard(this)">?</div>
+        </div>
+        
+        <div id="message"></div>
+        <button id="connect-button" onclick="showWifiInfo()">JOIN THE DARK SIDE</button>
+        <div id="wifi-info">
+            <p>Network: Yes We Have</p>
+            <p>Password: Balaban00!</p>
         </div>
     </div>
 
     <script>
-        // Önceki JavaScript kodları aynı kalacak, yeni fonksiyonları ekliyorum
-        
-        function showPopup() {
-            document.getElementById('wifi-popup').style.display = 'block';
-            document.getElementById('overlay').style.display = 'block';
+        let flippedCards = [];
+        let matchedPairs = 0;
+        let symbols = ['⚔️', '🌟', '🚀', '👾'];
+        let canFlip = true;
+
+        function flipCard(card) {
+            if (!canFlip || card.classList.contains('flipped')) return;
+            
+            card.classList.add('flipped');
+            card.textContent = symbols[card.dataset.value - 1];
+            
+            flippedCards.push(card);
+            
+            if (flippedCards.length === 2) {
+                canFlip = false;
+                checkMatch();
+            }
         }
 
-        function closePopup() {
-            document.getElementById('wifi-popup').style.display = 'none';
-            document.getElementById('overlay').style.display = 'none';
-        }
-
-        function copyText(text) {
-            navigator.clipboard.writeText(text).then(function() {
-                // Kopyalama başarılı
-                const btn = event.target;
-                const originalText = btn.textContent;
-                btn.textContent = 'Copied!';
+        function checkMatch() {
+            const [card1, card2] = flippedCards;
+            
+            if (card1.dataset.value === card2.dataset.value) {
+                matchedPairs++;
+                if (matchedPairs === 4) {
+                    document.getElementById('message').textContent = 'The Force is strong with you!';
+                    document.getElementById('connect-button').style.display = 'block';
+                }
+            } else {
                 setTimeout(() => {
-                    btn.textContent = originalText;
+                    card1.classList.remove('flipped');
+                    card2.classList.remove('flipped');
+                    card1.textContent = '?';
+                    card2.textContent = '?';
                 }, 1000);
-            }).catch(function(err) {
-                console.error('Could not copy text: ', err);
+            }
+            
+            setTimeout(() => {
+                flippedCards = [];
+                canFlip = true;
+            }, 1000);
+        }
+
+        function showWifiInfo() {
+            document.getElementById('wifi-info').style.display = 'block';
+        }
+
+        function shuffleCards() {
+            const cards = document.querySelectorAll('.card');
+            cards.forEach(card => {
+                let randomPos = Math.floor(Math.random() * cards.length);
+                card.style.order = randomPos;
             });
         }
 
-        // Connect button'un onclick eventi değişecek
-        document.getElementById('connect-button').onclick = function(e) {
-            e.preventDefault();
-            showPopup();
-        };
-
-        // Overlay'e tıklandığında popup'ı kapat
-        document.getElementById('overlay').onclick = closePopup;
+        window.onload = shuffleCards;
     </script>
 </body>
 </html>
