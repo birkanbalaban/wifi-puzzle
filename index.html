@@ -1,217 +1,134 @@
 <!DOCTYPE html>
-<html>
+<html lang="tr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Star Wars Memory Challenge</title>
+    <title>Star Wars Hafıza Oyunu</title>
     <style>
-        body { 
-            margin: 0; 
-            padding: 20px; 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #2d2d2d 0%, #ff5722 50%, #2d2d2d 100%);
+        body {
+            background: #000;
+            color: #FFD700;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
-            position: relative;
-            overflow: hidden;
         }
-        body::before {
-            content: '';
-            position: absolute;
-            width: 200%;
-            height: 200%;
-            top: -50%;
-            left: -50%;
-            background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2 2"><path d="M0 0h2v2H0z" fill="%23ffffff03"/></svg>');
-            background-size: 4px 4px;
-            animation: stars 60s linear infinite;
-            z-index: 1;
-        }
-        @keyframes stars {
-            from {transform: translateY(0);}
-            to {transform: translateY(100px);}
-        }
+
         .container {
-            background: rgba(45, 45, 45, 0.85);
-            padding: 30px;
-            border-radius: 20px;
-            border: 2px solid #FF5722;
-            box-shadow: 0 0 30px rgba(255, 87, 34, 0.3);
+            max-width: 600px;
             text-align: center;
-            max-width: 500px;
-            width: 90%;
-            position: relative;
-            z-index: 2;
-            backdrop-filter: blur(5px);
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #FFD700;
         }
-        h1 {
-            font-family: "Star Jedi", "Courier New", monospace;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            margin-bottom: 20px;
-            color: #FF5722;
-            text-shadow: 0 0 10px rgba(255, 87, 34, 0.5);
-        }
-        .memory-game {
+
+        .memory-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 10px;
-            margin: 20px auto;
-            max-width: 400px;
+            margin: 20px 0;
         }
+
         .card {
-            background: #2d2d2d;
             aspect-ratio: 1;
+            background: #333;
+            border: 2px solid #FFD700;
             border-radius: 5px;
             cursor: pointer;
-            transition: all 0.3s;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 24px;
-            color: white;
-            border: 2px solid #FF5722;
-            box-shadow: 0 0 10px rgba(255, 87, 34, 0.2);
+            transition: transform 0.3s;
         }
-        .card:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 20px rgba(255, 87, 34, 0.4);
-        }
-        .card.flipped {
-            background: #FF5722;
-            transform: rotateY(180deg);
-        }
-        #connect-button {
+
+        .wifi-info {
             display: none;
-            padding: 15px 30px;
-            background: #FF5722;
-            color: white;
+            margin-top: 20px;
+            padding: 20px;
+            background: #222;
+            border-radius: 5px;
+        }
+
+        #connect-btn {
+            background: #FFD700;
+            color: #000;
             border: none;
-            border-radius: 25px;
-            font-size: 16px;
-            font-weight: bold;
+            padding: 10px 20px;
+            border-radius: 5px;
             cursor: pointer;
-            margin: 20px auto;
-            transition: all 0.3s;
-            letter-spacing: 2px;
-            box-shadow: 0 0 20px rgba(255, 87, 34, 0.4);
-            max-width: 300px;
-        }
-        #connect-button:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 30px rgba(255, 87, 34, 0.6);
-        }
-        #message {
-            margin-top: 15px;
-            color: #FF5722;
-            font-weight: bold;
-            font-family: "Courier New", monospace;
-            text-shadow: 0 0 10px rgba(255, 87, 34, 0.5);
-        }
-        .subtitle {
-            color: #FF5722;
-            font-family: "Courier New", monospace;
-            margin-bottom: 20px;
-            opacity: 0.8;
-        }
-        .yoda-quote {
-            font-style: italic;
-            color: #FF5722;
-            margin: 20px 0;
-            font-size: 14px;
-            opacity: 0.8;
+            margin-top: 20px;
+            display: none;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Jedi Mind Challenge</h1>
-        <p class="subtitle">Trust in the Force, you must</p>
-        <p class="yoda-quote">"Do. Or do not. There is no try." - Master Yoda</p>
-        
-        <div class="memory-game">
-            <div class="card" data-value="1" onclick="flipCard(this)">?</div>
-            <div class="card" data-value="1" onclick="flipCard(this)">?</div>
-            <div class="card" data-value="2" onclick="flipCard(this)">?</div>
-            <div class="card" data-value="2" onclick="flipCard(this)">?</div>
-            <div class="card" data-value="3" onclick="flipCard(this)">?</div>
-            <div class="card" data-value="3" onclick="flipCard(this)">?</div>
-            <div class="card" data-value="4" onclick="flipCard(this)">?</div>
-            <div class="card" data-value="4" onclick="flipCard(this)">?</div>
-        </div>
-        
+        <h1>Star Wars Hafıza Oyunu</h1>
+        <div class="memory-grid" id="grid"></div>
         <div id="message"></div>
-        <button id="connect-button" onclick="connectToWifi()">Connect to the dark side now!</button>
+        <button id="connect-btn" onclick="showWifiInfo()">Wi-Fi'ya Bağlan</button>
+        <div class="wifi-info" id="wifi-info">
+            <p>Ağ Adı: Yes We Have</p>
+            <p>Şifre: Balaban00!</p>
+        </div>
     </div>
 
     <script>
-        let flippedCards = [];
-        let matchedPairs = 0;
-        let symbols = ['⚔️', '🌟', '🚀', '👾'];
-        let canFlip = true;
+        const symbols = ['⭐', '🚀', '🌟', '💫', '🛸', '🌠', '🌌', '🌍'];
+        let cards = [...symbols, ...symbols];
+        let flipped = [];
+        let matched = [];
 
-        function shuffleCards() {
-            const cards = document.querySelectorAll('.card');
-            cards.forEach(card => {
-                let randomPos = Math.floor(Math.random() * cards.length);
-                card.style.order = randomPos;
+        function initGame() {
+            cards.sort(() => Math.random() - 0.5);
+            const grid = document.getElementById('grid');
+            cards.forEach((symbol, index) => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.setAttribute('data-index', index);
+                card.onclick = () => flipCard(card, index);
+                card.textContent = '?';
+                grid.appendChild(card);
             });
         }
 
-        function flipCard(card) {
-            if (!canFlip || card.classList.contains('flipped')) return;
+        function flipCard(card, index) {
+            if (flipped.length === 2 || matched.includes(index)) return;
+            card.textContent = cards[index];
+            flipped.push({card, index});
             
-            card.classList.add('flipped');
-            card.textContent = symbols[card.dataset.value - 1];
-            
-            flippedCards.push(card);
-            
-            if (flippedCards.length === 2) {
-                canFlip = false;
+            if (flipped.length === 2) {
                 checkMatch();
             }
         }
 
         function checkMatch() {
-            const [card1, card2] = flippedCards;
-            
-            if (card1.dataset.value === card2.dataset.value) {
-                matchedPairs++;
-                if (matchedPairs === 4) {
-                    document.getElementById('message').textContent = 'The Force is strong with this one!';
-                    document.getElementById('connect-button').style.display = 'block';
+            const [first, second] = flipped;
+            if (cards[first.index] === cards[second.index]) {
+                matched.push(first.index, second.index);
+                flipped = [];
+                if (matched.length === cards.length) {
+                    document.getElementById('connect-btn').style.display = 'block';
                 }
             } else {
                 setTimeout(() => {
-                    card1.classList.remove('flipped');
-                    card2.classList.remove('flipped');
-                    card1.textContent = '?';
-                    card2.textContent = '?';
+                    first.card.textContent = '?';
+                    second.card.textContent = '?';
+                    flipped = [];
                 }, 1000);
             }
-            
-            setTimeout(() => {
-                flippedCards = [];
-                canFlip = true;
-            }, 1000);
         }
 
-        function connectToWifi() {
-            const ssid = "Yes We Have";
-            const password = "Balaban00!";
-            const wifiConfig = `WIFI:T:WPA;S:${ssid};P:${password};;`;
-            
-            if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-                window.location.href = wifiConfig;
-            } else {
-                alert('Wifi Bilgileri:\nAğ: Yes We Have\nŞifre: Balaban00!');
-            }
+        function showWifiInfo() {
+            document.getElementById('wifi-info').style.display = 'block';
         }
 
-        window.onload = shuffleCards;
+        initGame();
     </script>
 </body>
 </html>
